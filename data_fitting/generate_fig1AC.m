@@ -1,4 +1,5 @@
 clear;clc
+mkdir -p ../figures
 
 %This figure generates figures 1A and 1C
 
@@ -26,6 +27,9 @@ opts.Upper = [1,n_upper,n_upper,n_upper,1,1];
 c_ints = confint(fitresult);
 [x_nd_vec,tout_cell,yout_cell] = simulate_rpos_chemostat(xData,fitresult.E,...
     fitresult.DeltaE_01,fitresult.DeltaE_03,fitresult.DeltaE_06,fitresult.debtor_init,fitresult.Gamma,delta_vec);
+
+%Display fitresult
+fitresult
 
 
 %Run to get confidence intervals
@@ -69,7 +73,7 @@ legend(h1,'FontSize',FontSize)
 ylim([1e-4,1])
 set(gca,'FontSize',FontSize)
 
-print(gcf,'fig1A.svg','-dsvg','-r600');
+print(gcf,'../figures/fig1A.svg','-dsvg','-r600');
 
 
 %% Plot fig1C (growth rate vs. deltaE)
@@ -80,13 +84,12 @@ FontSize = 11;
 x = [0.1 0.3 0.6];
 y = [fitresult.DeltaE_01, fitresult.DeltaE_03,fitresult.DeltaE_06];
 err = y - c_ints(1,2:4);
-plot(x,y,'ko','MarkerFaceColor','k');
-errorbar(x,y,err,'k-','LineWidth',1.5);
+plot(1./x,y,'ko','MarkerFaceColor','k');
+errorbar(1./x,y,err,'k-','LineWidth',1.5);
 set(gca,'XScale','linear','YScale','linear')
-xlim([0,0.6])
-xlabel('Dilution rate, $\delta$ (h$^{-1}$)','Interpreter','latex')
+xlabel('Inverse dilution, $1/\delta$ (h)','Interpreter','latex')
 ylabel({'Debtor mutant', 'advantage, $\Delta_E/E$'},'Interpreter','latex')
 set(gca,'FontSize',FontSize)
 
-print(gcf,'fig1C.svg','-dsvg','-r600');
+print(gcf,'../figures/fig1C.svg','-dsvg','-r600');
 

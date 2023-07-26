@@ -7,7 +7,7 @@ function [x_nd_vec,tout_cell,yout_cell] = simulate_rpos_chemostat(target_tau_vec
 
 
 %Get the target time from the target tau
-target_t_vec = target_tau_vec./delta_vec;
+target_t_vec = target_tau_vec./delta_vec*log(2);
 
 for i = 1:length(target_tau_vec)
   
