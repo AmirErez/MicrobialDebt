@@ -1,0 +1,11 @@
+MD5 (highOmega400K_sim_group_1000_v2.mat) = 0954317b0d7ea45f18786af53668e729
+MD5 (hpc_high_Omega_coexistence_10K_part1_collected_results.mat) = c685ddd6a2a713e3388ada45edcb9042
+MD5 (hpc_high_Omega_fifth_noise_10K_precollected_results.mat) = 47924b31760863984b166eb897e51274
+MD5 (hpc_production_variable_K_sweep_results_table.csv) = 83fca600b8b7e8378bd1e9e8027558af
+MD5 (hpc_small_Omega_coexistence_stochastic_tf_notlong_correctedDrift_10K_precollected_results.mat) = e8be3abcbee933ec6060e57af7d8f96a
+MD5 (hpc_small_Omega_coexistence_tf_notlong_correctedDrift_10K_precollected_results.mat) = b09e784bd08aba2a8fb90c43f21b3c00
+MD5 (initial_continuous_stochastic_sweep_results_table.csv) = 00db465ffec0d78f1cedd9ea6706a880
+MD5 (initial_continuous_sweep_results_table.csv) = 8939550c79f5aa4ef8242157ca22e1fb
+MD5 (initial_punctuated_stochastic_sweep_results_table.csv) = 4510c8813fb6c625f6cae2b385183549
+MD5 (initial_punctuated_sweep_results_table.csv) = 2aa037d54762c031a058cc36d0f6d2f5
+
