@@ -1,9 +1,26 @@
 clear
 
+  
+
+
 s1=load('automated_runs/results/hpc_high_Omega_coexistence_10K_part1_collected_results.mat');
 s1batches = s1.batches;
 s1rho1_mat = s1.rho1_mat;
 s1rho2_mat = s1.rho2_mat;
+
+%These are the theoretical mean and std of log ratio increments ln(r_(b+1))-ln(r_b) 
+%The variables used in this simulation:
+c0=100 ;
+rho0=1 ;
+E=1 ;
+deltaE=0.05 ;
+Omega=0.002508737448117671 ;
+max_batches=400000 ;
+tf=92.0176177196183 ;
+theory_mu=(Omega*tf-deltaE/E*log(1+c0/rho0));
+delta_Omega2=0.000250873744811767 ;
+theory_sigma=sqrt(tf^2*(delta_Omega2^2)/3);
+
 
 s2=load('automated_runs/results/hpc_high_Omega_fifth_noise_10K_precollected_results');
 s2sbatches = s2.precollected_final.batch_cell{1};
@@ -12,6 +29,18 @@ s2rho2_mat = s2.precollected_final.rho2_mat;
 load('automated_runs/results/highOmega400K_sim_group_1000_v2.mat')
 str='highOmega10K-lowNoise';
 det_cell=1;
+batch_array = (0:(length(s2rho1_mat(1,:)-2)))/length(s2rho1_mat(1,:))*max_batches ;
+%These are arrays of the theoretical mean and variance in ln(r_b) over batch counts
+%We used ln(r_0)=0, since I thought we had rho_N=rho_D at b=0
+logr_theory_avg = batch_array*theory_mu;
+logr_theory_var = batch_array*(theory_sigma^2);
+xx = [-1000:1000];
+frac_theory_avg = zeros(size(logr_theory_avg));
+for jj=1:length(logr_theory_avg)
+    mn = logr_theory_avg(jj);
+    vr = logr_theory_var(jj);
+    frac_theory_avg(jj) = trapz(xx, (1./(1+exp(-xx))).*exp(-((xx-mn).^2)./(2*vr))/sqrt(2*vr*pi)) ;
+end
 
 %
 
@@ -31,6 +60,8 @@ x=(1:size(s2rho1_mat,2))*100;
 plot(x,mn,...
     '-', 'LineWidth',1.5, 'Color', col_weak_noise,...
     'DisplayName','$\Omega\pm 10\%$ Noise')
+h = plot(batch_array(10:end), frac_theory_avg(10:end), '--k', 'LineWidth',1.5, 'DisplayName','Gaussian Theory');
+h.Annotation.LegendInformation.IconDisplayStyle = 'off';
 % h=plot(x,mn-s,...
 %     '--', 'LineWidth',1.5, 'Color', col_weak_noise
 %     'DisplayName','$\Omega\pm 10\%$ Noise')
@@ -44,12 +75,26 @@ h=patch([x fliplr(x)], [mn-s fliplr(mn+s)], col_weak_noise,'FaceAlpha',0.1,...
 h.Annotation.LegendInformation.IconDisplayStyle = 'off';
 
 
+delta_Omega2=Omega/2 ;
+theory_sigma=sqrt(tf^2*(delta_Omega2^2)/3);
+logr_theory_avg = batch_array*theory_mu;
+logr_theory_var = batch_array*(theory_sigma^2);
+xx = [-1000:1000];
+frac_theory_avg = zeros(size(logr_theory_avg));
+for jj=1:length(logr_theory_avg)
+    mn = logr_theory_avg(jj);
+    vr = logr_theory_var(jj);
+    frac_theory_avg(jj) = trapz(xx, (1./(1+exp(-xx))).*exp(-((xx-mn).^2)./(2*vr))/sqrt(2*vr*pi)) ;
+end
+
 mn=mean(s1rho1_mat./(s1rho1_mat+s1rho2_mat),1);
 s=std(s1rho1_mat./(s1rho1_mat+s1rho2_mat),1)/sqrt(size(s2rho1_mat,1)-1);
 x=(1:size(s1rho1_mat,2))*100;
 plot(x, mn,...
     '-', 'LineWidth',1.5, 'Color', col_strong_noise,...
     'DisplayName','$\Omega\pm 50\%$ Noise')
+plot(batch_array, frac_theory_avg, '--k', 'LineWidth',1.5, 'DisplayName','Gaussian')
+
 % h=plot(x, mn+s,...
 %     '--', 'LineWidth',1.5, 'Color', col_strong_noise,'Alpha',0.1,...
 %     'DisplayName','$\Omega\pm 50\%$ Noise')
